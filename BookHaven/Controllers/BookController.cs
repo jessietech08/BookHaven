@@ -1,6 +1,7 @@
 ﻿using BookHaven.Data;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace BookHaven.Controllers
 {
@@ -13,9 +14,10 @@ namespace BookHaven.Controllers
         }
 
         // GET: BookController
-        public ActionResult Index()
+        public async Task<ActionResult> Index()
         {
-            return View();
+            var books = await _context.Books.ToListAsync();
+            return View(books);
         }
 
         [HttpGet]
