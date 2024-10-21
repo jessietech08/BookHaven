@@ -28,15 +28,6 @@ namespace BookHaven.Controllers
             return View();
         }
 
-        public byte[] ConvertImageToByteArray(IFormFile image)
-        {
-            using (var memoryStream = new MemoryStream())
-            {
-                image.CopyTo(memoryStream);
-                return memoryStream.ToArray();
-            }
-        }
-
         // POST: Create
         [HttpPost]
         public async Task<IActionResult> Create(Book b)
