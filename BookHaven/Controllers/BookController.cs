@@ -1,4 +1,5 @@
 ﻿using BookHaven.Data;
+using BookHaven.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -22,12 +23,43 @@ namespace BookHaven.Controllers
 
         [HttpGet]
         // GET: Create
-        public ActionResult Create()
+        public IActionResult Create()
         {
             return View();
         }
 
+        public byte[] ConvertImageToByteArray(IFormFile image)
+        {
+            using (var memoryStream = new MemoryStream())
+            {
+                image.CopyTo(memoryStream);
+                return memoryStream.ToArray();
+            }
+        }
+
         // POST: Create
+        [HttpPost]
+        public async Task<IActionResult> Create(Book b)
+        {
+            if (ModelState.IsValid)
+            {
+                var book = new Book
+                {
+                    Isbn = b.Isbn,
+                    Title = b.Title,
+                    Author = b.Author,
+                    Genre = b.Genre,
+                    Image = b.Image,
+                    Description = b.Description,
+                    Price = b.Price
+                };
+
+                _context.Add(book);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
+            }
+            return View(b);
+        }
 
         // GET: Edit
         [HttpGet]
