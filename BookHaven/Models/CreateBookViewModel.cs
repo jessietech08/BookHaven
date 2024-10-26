@@ -21,7 +21,6 @@ namespace BookHaven.Models
 
         [Required]
         [DataType(DataType.Upload)]
-        [FileExtensions(Extensions = "jpg,jpeg,png")]
         public IFormFile Image { get; set; } 
 
         [Required]
