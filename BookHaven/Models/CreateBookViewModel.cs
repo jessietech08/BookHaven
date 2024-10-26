@@ -1,16 +1,9 @@
-﻿#nullable disable
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace BookHaven.Models
 {
-    /// <summary>
-    /// Book class represents a book
-    /// </summary>
-    public class Book
+    public class CreateBookViewModel
     {
-        [Key]
-        public int BookId { get; set; }
-
         [Required]
         [StringLength(13, MinimumLength = 10)]
         public string Isbn { get; set; }
@@ -27,7 +20,8 @@ namespace BookHaven.Models
         public string Genre { get; set; }
 
         [Required]
-        public string Image { get; set; }
+        [DataType(DataType.Upload)]
+        public IFormFile Image { get; set; } 
 
         [Required]
         public string Description { get; set; }
