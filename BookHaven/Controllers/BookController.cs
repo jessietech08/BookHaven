@@ -3,15 +3,18 @@ using BookHaven.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Net;
 
 namespace BookHaven.Controllers
 {
     public class BookController : Controller
     {
         private readonly ApplicationDbContext _context;
-        public BookController(ApplicationDbContext context) 
+        private readonly IWebHostEnvironment WebHostEnvironment;
+        public BookController(ApplicationDbContext context, IWebHostEnvironment webHostEnvironment) 
         { 
             _context = context;
+            WebHostEnvironment = webHostEnvironment;
         }
 
         // GET: BookController
@@ -30,26 +33,44 @@ namespace BookHaven.Controllers
 
         // POST: Create
         [HttpPost]
-        public async Task<IActionResult> Create(Book b)
+        public async Task<IActionResult> Create(CreateBookViewModel model)
         {
+            string stringFileName = UploadFile(model);
             if (ModelState.IsValid)
             {
                 var book = new Book
                 {
-                    Isbn = b.Isbn,
-                    Title = b.Title,
-                    Author = b.Author,
-                    Genre = b.Genre,
-                    Image = b.Image,
-                    Description = b.Description,
-                    Price = b.Price
+                    Isbn = model.Isbn,
+                    Title = model.Title,
+                    Author = model.Author,
+                    Genre = model.Genre,
+                    Image = stringFileName,
+                    Description = model.Description,
+                    Price = model.Price
                 };
 
                 _context.Add(book);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(b);
+            return View(model);
+        }
+
+        // https://www.youtube.com/watch?v=7nFErqpxtbg
+        private string UploadFile(CreateBookViewModel model)
+        {
+            string fileName = null;
+            if (model.Image != null)
+            {
+                string uploadDir = Path.Combine(WebHostEnvironment.WebRootPath, "uploads");
+                fileName = Guid.NewGuid().ToString() + "-" + model.Image.FileName;
+                string filePath = Path.Combine(uploadDir, fileName);
+                using (var fileStream = new FileStream(filePath, FileMode.Create)) 
+                {
+                    model.Image.CopyTo(fileStream);
+                }
+            }
+            return fileName;
         }
 
         // GET: Edit
