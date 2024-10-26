@@ -1,9 +1,12 @@
 ﻿using BookHaven.Data;
 using BookHaven.Models;
+using Humanizer;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.IO;
 using System.Net;
+using static NuGet.Packaging.PackagingConstants;
 
 namespace BookHaven.Controllers
 {
@@ -57,14 +60,23 @@ namespace BookHaven.Controllers
         }
 
         // https://www.youtube.com/watch?v=7nFErqpxtbg
+        /// <summary>
+        /// This method uploads the image to the server's "uploads" folder and returns the unique file name that was used
+        /// </summary>
+        /// <param name="model">Uses CreateBookViewModel</param>
+        /// <returns>unique file name</returns>
         private string UploadFile(CreateBookViewModel model)
         {
             string fileName = null;
             if (model.Image != null)
             {
+                // Combines the root path of web application with the "uploads" folder
                 string uploadDir = Path.Combine(WebHostEnvironment.WebRootPath, "uploads");
+                // Creates a unique file name using a GUID to avoid overwriting existing files
                 fileName = Guid.NewGuid().ToString() + "-" + model.Image.FileName;
+                // Creates a new file stream at the specified path.
                 string filePath = Path.Combine(uploadDir, fileName);
+                // Copies the uploaded file’s content to the new file.
                 using (var fileStream = new FileStream(filePath, FileMode.Create)) 
                 {
                     model.Image.CopyTo(fileStream);
