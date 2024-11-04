@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.IO;
 using System.Net;
+using System.Security.Policy;
 using static NuGet.Packaging.PackagingConstants;
 
 namespace BookHaven.Controllers
@@ -96,12 +97,34 @@ namespace BookHaven.Controllers
 
         // GET: Delete
         [HttpGet]
-        public ActionResult Delete(int id)
+        public async Task<IActionResult> Delete(int id)
         {
-            return View();
+            Book? bookToDelete = await _context.Books.FindAsync(id);
+
+            if (bookToDelete == null)
+            {
+                return NotFound();
+            }
+
+            return View(bookToDelete);
         }
 
         // POST: Delete
+        [HttpPost, ActionName("Delete")]
+        public async Task<IActionResult> DeleteConfirmed(int id)
+        {
+            Book booktToDelete = await _context.Books.FindAsync(id);
+
+            if (booktToDelete != null)
+            {
+                _context.Books.Remove(booktToDelete);
+                await _context.SaveChangesAsync();
+                TempData["Message"] = booktToDelete.Title + " was deleted";
+                return RedirectToAction("Index");
+            }
+
+            return RedirectToAction("Index");
+        }
 
         // GET: Details
         public ActionResult Details(int id)
