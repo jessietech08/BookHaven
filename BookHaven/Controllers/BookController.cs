@@ -88,12 +88,46 @@ namespace BookHaven.Controllers
 
         // GET: Edit
         [HttpGet]
-        public ActionResult Edit(int id)
+        public async Task<ActionResult> Edit(int id)
         {
-            return View();
+            Book? bookToEdit = await _context.Books.FindAsync(id);
+
+            if (bookToEdit == null)
+            {
+                return NotFound();
+            }
+            return View(bookToEdit);
         }
 
         // POST: Edit
+        [HttpPost, ActionName("Edit")]
+        public async Task<IActionResult> Edit(int id, CreateBookViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                Book bookToEdit = await _context.Books.FindAsync(id);
+                if (bookToEdit != null)
+                {
+                    if (model.Image != null)
+                    {
+                        string stringFileName = UploadFile(model);
+                        bookToEdit.Image = stringFileName;
+                    }
+
+                    bookToEdit.Isbn = model.Isbn;
+                    bookToEdit.Title = model.Title;
+                    bookToEdit.Author = model.Author; 
+                    bookToEdit.Genre = model.Genre;
+                    bookToEdit.Description = model.Description;
+                    bookToEdit.Price = model.Price;
+
+                    _context.Books.Update(bookToEdit);
+                    await _context.SaveChangesAsync();
+                    return RedirectToAction("Index");
+                }
+            }
+            return View(model);
+        }
 
         // GET: Delete
         [HttpGet]
@@ -119,7 +153,6 @@ namespace BookHaven.Controllers
             {
                 _context.Books.Remove(booktToDelete);
                 await _context.SaveChangesAsync();
-                TempData["Message"] = booktToDelete.Title + " was deleted";
                 return RedirectToAction("Index");
             }
 
