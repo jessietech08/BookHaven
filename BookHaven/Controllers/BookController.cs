@@ -160,9 +160,14 @@ namespace BookHaven.Controllers
         }
 
         // GET: Details
-        public ActionResult Details(int id)
+        public async Task<ActionResult> Details(int id)
         {
-            return View();
+            var book = await _context.Books.FindAsync(id);
+            if (book == null)
+            {
+                return NotFound();
+            }
+            return View(book);
         }
     }
 }
