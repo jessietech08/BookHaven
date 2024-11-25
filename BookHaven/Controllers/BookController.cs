@@ -1,6 +1,7 @@
 ﻿using BookHaven.Data;
 using BookHaven.Models;
 using Humanizer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -29,6 +30,7 @@ namespace BookHaven.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "Admin")]
         // GET: Create
         public IActionResult Create()
         {
@@ -37,6 +39,7 @@ namespace BookHaven.Controllers
 
         // POST: Create
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Create(CreateBookViewModel model)
         {
             string stringFileName = UploadFile(model);
@@ -88,6 +91,7 @@ namespace BookHaven.Controllers
 
         // GET: Edit
         [HttpGet]
+        [Authorize(Roles = "Admin")]
         public async Task<ActionResult> Edit(int id)
         {
             Book? bookToEdit = await _context.Books.FindAsync(id);
@@ -101,6 +105,7 @@ namespace BookHaven.Controllers
 
         // POST: Edit
         [HttpPost, ActionName("Edit")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Edit(int id, CreateBookViewModel model)
         {
             if (ModelState.IsValid)
@@ -131,6 +136,7 @@ namespace BookHaven.Controllers
 
         // GET: Delete
         [HttpGet]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Delete(int id)
         {
             Book? bookToDelete = await _context.Books.FindAsync(id);
@@ -145,6 +151,7 @@ namespace BookHaven.Controllers
 
         // POST: Delete
         [HttpPost, ActionName("Delete")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             Book booktToDelete = await _context.Books.FindAsync(id);
