@@ -12,5 +12,7 @@ namespace BookHaven.Data
         }
 
         public DbSet<Book> Books { get; set; }
+
+        public DbSet<CartItemModel> CartItems { get; set; }
     }
 }
