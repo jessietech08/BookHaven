@@ -59,5 +59,17 @@
     {
         <a asp-action="Edit" asp-route-id="@Model?.BookId">Edit</a>
     } 
+    @if (User.Identity.IsAuthenticated)
+    {
+        <form asp-controller="Cart" asp-action="AddToCart" method="post"> 
+            <input type="hidden" name="bookId" value="@Model.BookId" /> 
+            <input type="number" name="quantity" value="1" min="1" /> 
+            <button type="submit" class="btn btn-primary">Add to Cart</button> 
+        </form>
+    }
+    else
+    {
+        <p>Please <a asp-controller="Account" asp-action="Login">login</a> to add items to your cart.</p>
+    }
     <a asp-action="Index">Back to List</a>
 </div>
