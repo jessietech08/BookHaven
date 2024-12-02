@@ -1,0 +1,37 @@
+﻿@model IEnumerable<BookHaven.Models.CartItemModel>
+
+@{
+    ViewData["Title"] = "Your Cart";
+}
+
+<h1>Your Cart</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Title</th>
+            <th>Quantity</th>
+            <th>Price</th>
+            <th>Total</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.Book.Title</td>
+                <td>@item.Quantity</td>
+                <td>@item.Book.Price</td>
+                <td>@(item.Quantity * item.Book.Price)</td>
+            </tr>
+        }
+    </tbody>
+    <tfoot>
+        <tr>
+            <td colspan="3">Total</td>
+            <td>@Model.Sum(i => i.Quantity * i.Book.Price).ToString("F2")</td>
+        </tr>
+    </tfoot>
+</table>
+<a asp-controller="Book" asp-action="Index">Continue Shopping</a>
+<p>Checkout</p>
