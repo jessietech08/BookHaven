@@ -28,6 +28,6 @@ namespace BookHaven.Models
         /// <summary>
         /// unique identifier for user's cart
         /// </summary>
-        public string CartId { get; set; }
+        public string CartId { get; set; } = string.Empty;
     }
 }

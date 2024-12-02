@@ -62,7 +62,8 @@
     @if (User.Identity.IsAuthenticated)
     {
         <form asp-controller="Cart" asp-action="AddToCart" method="post"> 
-            <input type="hidden" name="bookId" value="@Model.BookId" /> 
+            <input type="hidden" name="bookId" value="@Model.BookId" />
+            <label>Quantity</label>
             <input type="number" name="quantity" value="1" min="1" /> 
             <button type="submit" class="btn btn-primary">Add to Cart</button> 
         </form>
