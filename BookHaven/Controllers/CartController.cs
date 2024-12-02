@@ -19,6 +19,7 @@ namespace BookHaven.Controllers
 
         public IActionResult Index()
         {
+            // // Retrieves the CartId stored in the user's session
             string cartId = HttpContext.Session.GetString("CartId");
             if (string.IsNullOrEmpty(cartId) )
             {
@@ -26,8 +27,8 @@ namespace BookHaven.Controllers
             }
 
             var cartItems = _context.CartItems
-                .Include(ci => ci.Book)
-                .Where(ci => ci.CartId == cartId)
+                .Include(cartItem => cartItem.Book)
+                .Where(cartItem => cartItem.CartId == cartId)
                 .ToList();
 
             return View(cartItems);
@@ -36,10 +37,14 @@ namespace BookHaven.Controllers
         [HttpPost]
         public IActionResult AddToCart(int bookId, int quantity)
         {
+            // Retrieves the CartId stored in the user's session
             string cartId = HttpContext.Session.GetString("CartId");
             if (string.IsNullOrEmpty(cartId))
             {
+                // Creates a new unique CartId using a GUID
+                // (Globally Unique Identifier)
                 cartId = Guid.NewGuid().ToString();
+                // Saves the generated CartId into the session, associating it with the user
                 HttpContext.Session.SetString("CartId", cartId);
             }
 

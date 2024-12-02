@@ -21,7 +21,9 @@ builder.Services.AddDistributedMemoryCache();
 builder.Services.AddSession(options =>
 {
     options.IdleTimeout = TimeSpan.FromMinutes(30); // Set session timeout
+    // Enhancing security by mitigating certain types of attacks
     options.Cookie.HttpOnly = true;
+    // This is useful for ensuring session data is always available when needed
     options.Cookie.IsEssential = true;
 });
 
@@ -74,6 +76,7 @@ app.MapControllerRoute(
     pattern: "{controller=Home}/{action=Index}/{id?}");
 app.MapRazorPages();
 
+// Allows application to store and retrieve session data
 app.UseSession();
 
 IServiceScope serviceProvider = app.Services.GetRequiredService<IServiceProvider>().CreateScope();
