@@ -1,3 +1,45 @@
 ﻿@{
     ViewData["Title"] = "Home Page";
 }
+@model IEnumerable<BookHaven.Models.Book>
+
+<div class="intro">
+    <h1>Welcome To Book Haven</h1>
+    <p>
+        sdfkhSLFhdsaKJLFHSDJFhdslfhdsjhsdjhfSKJFhKJFSKJFSDKJfsdfsdfkjdsfhsdfkdsjhfksdjsdfsd
+        fdjdslkjlksdffdghfdjkghSDKJfhskfhsdklfhkejsahfskejfhskjdfhsdkfhsdufhsiuhseifheswfes
+        dsfhdsfdsjkfhsdkfjdshfkjsfhsdkjfhsdjfhsdkjfhsdskdjaslkdjsadlksajdaslkdjaslkdasjlkds
+    </p>
+    <a class="button" asp-controller="Home" asp-action="About">Learn more</a>
+</div>
+
+<div><h2 id="features">Featured Books</h2></div>
+
+<div class="book-gallery"> 
+    @foreach (var book in Model)
+    {
+        <div class="book-item">
+            <img src="~/uploads/@book.Image" width="200" height="200" alt="@book.Title" />
+            <h4>@book.Title</h4> 
+            <p>@book.Price</p> 
+        </div>
+    }
+</div>
+<div class="center-container">
+    <a id="shop" class="button" asp-controller="Book" asp-action="Index">Shop</a>
+</div>
+
+<div class="about">
+    <div class ="column">
+        <img src="~/img/BookCats.jpg" alt="Book Cats" />
+    </div>
+    <div class="column">
+        <h2>About Us</h2>
+        <p>
+            sdkjfhdsklfhsdkjfhsdlfhsdkjfhsdjklfhsdkjhskdfhskjfssdlfsdlkfsdfjdslkfjdslkfjsdlkfjsdkl
+            sdlkjfdslkfjsdkl;fsdlfjsklfskfjslkfslkfsdflkjdslsdjfdskjdshfsdkjfhsdkjfhsdkjfhskdjhfsd
+            isdlfjdslkfjdsdsjflaskfjsd;lkfasjfksdafjsdlkfjdslkfsdlkfjsdlkfjsdklfjskdlfjsdkfjsdlkfj
+        </p>
+        <a class="button" asp-controller="Home" asp-action="About">About Page</a>
+    </div>
+</div>
