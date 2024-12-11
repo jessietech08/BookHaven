@@ -121,3 +121,7 @@ body {
     margin-bottom: 40px;
     font-size: 20px;
 }
+
+#shop_title {
+    text-align: center;
+}
