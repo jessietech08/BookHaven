@@ -19,7 +19,7 @@ namespace BookHaven.Controllers
 
         public IActionResult Index()
         {
-            // // Retrieves the CartId stored in the user's session
+            // Retrieves the CartId stored in the user's session
             string cartId = HttpContext.Session.GetString("CartId");
             if (string.IsNullOrEmpty(cartId) )
             {
